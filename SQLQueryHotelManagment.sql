@@ -154,31 +154,36 @@ insert into VisitorStays(VisitorId, StayId) VALUES
 	(6,6)
 --sve sobe hotela 'Lav' poredane po broju
 select * from Rooms where HotelId in (select Id from Hotels WHERE HotelName = 'Lav') order by Number 
+
 --sve sobe ciji broj zapocinje jedinicom
 select * from Rooms where Number like '1%'
+
 --svi zaposlenici hotela 'Sirena' koji je pod rednim brojem 4
 select * from Employees where HotelId = 4
 --cistacice hotela 'Sirena' koji je pod rednim brojem 4
 select FirstName, LastName from Employees where HotelId = 4 and Job = 'janitor'
+
 --sve kupnje
 select * from Reservations order by DateOfReservation desc
 --kupnje ostvarene poslije 01.12.2020. i cija je cijena 1000+
 select * from Reservations where DateOfReservation >= '2020-12-01' and Price > 1000
+
 --boravci u svim hotelima
 select * from Reservations where Id in (select Id from Stays) 
 --boravci koji su trenutno u tijeku u svim hotelima
 select * from Reservations where Id in (select Id from Stays) and ArrivalDate >= GETDATE() OR DepartureDate >= GETDATE()
+
 --povijesni pregled rezervacija sobe pod rednim brojem 1
 select * from Reservations where RoomId = 1
 --povijesni pregled boravaka sobe pod rednim brojem 1
 select * from Reservations where Id in (select Id from Stays) and RoomId = 1 order by ArrivalDate
+
 --svi boravci hotela 'Lav' koji je pod rednim brojem 1
 select * from Reservations where Id in (select Id from Stays) and RoomId in (select Id from Rooms where HotelId = 1)
 --svi boravci hotela 'Lav' koji su bili pansion ili half pansion - buduci da su svi takvi mozemo isprobati ispisati samo pansione u iducem koraku
 select * from Reservations where Id in (select Id from Stays) and RoomId in (select Id from Rooms where HotelId = 1) and TypeOfStay = 'pansion' OR TypeOfStay = 'half pansion'
 --samo pansioni
 select * from Reservations where Id in (select Id from Stays) and RoomId in (select Id from Rooms where HotelId = 1) and TypeOfStay = 'pansion'
---brisemo iz tablice VisitorStays kako bismo iz tablice Stays mogli izbrisati sve dolaske poslije 01.01.2020 
 
 --zelimo brisati sve boravke poslije 01.01.2020. , da bismo to mogli prvo ih treba izbrisati iz tablice VisitorStays pa iz tablice Stays 
 select * from VisitorStays
@@ -194,6 +199,7 @@ select * from Rooms where HotelId = 2
 update Rooms set Capacity = 4 where HotelId = 2 AND Capacity = 3
 update Rooms set Category = 'apartment' where HotelId = 2 AND Capacity = 4
 select * from Rooms where HotelId = 2
+
 --promoviramo 2 zaposlenika iz room service u recepcionist
 select * from Employees where Job = 'room service'
 UPDATE top(2) Employees set Job = 'recepcionist' where Job = 'room service'
